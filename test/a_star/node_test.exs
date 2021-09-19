@@ -32,4 +32,14 @@ defmodule AStar.NodeTest do
     assert neighbors |> length == 8
     refute node in neighbors
   end
+
+  test "lower_f/2 returns the node closest neighbor from the destination" do
+    node = %Node{point: %Point{x: 0, y: 0}}
+    destination = %Node{point: %Point{x: 2, y: 2}}
+
+    closest_neighbor = node |> Node.lower_f(destination)
+    expected_neighbor = %Node{point: %Point{x: 1, y: 1}}
+
+    assert closest_neighbor == expected_neighbor
+  end
 end

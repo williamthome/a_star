@@ -67,4 +67,15 @@ defmodule AStar.Node do
 
   defp valid_position?(%__MODULE__{} = node, max_x, max_y),
     do: Point.valid_position?(node.point, 0, max_x, 0, max_y, 0, 0)
+
+  @spec lower_f(t, t) :: t
+
+  @doc """
+  The node closest neighbor from the destination.
+  """
+  def lower_f(%__MODULE__{} = node, %__MODULE__{} = destination),
+    do:
+      node
+      |> neighbors
+      |> Enum.min_by(&f_score(node, &1, destination))
 end
