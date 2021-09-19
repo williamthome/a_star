@@ -29,4 +29,42 @@ defmodule AStar.Node do
     h = distance(next, destination)
     g_score + h
   end
+
+  @spec neighbors(t, number(), number()) :: [t]
+  @spec neighbors(t, nil, nil) :: [t]
+
+  @doc """
+  The neighbors from a node.
+  """
+  def neighbors(
+        %__MODULE__{point: %Point{x: node_x, y: node_y}} = node,
+        max_x \\ nil,
+        max_y \\ nil
+      ) do
+    min_x_range = node_x - 1
+    max_x_range = node_x + 1
+    min_y_range = node_y - 1
+    max_y_range = node_y + 1
+
+    x_range = min_x_range..max_x_range
+    y_range = max_y_range..min_y_range
+
+    neighborhood =
+      for x <- x_range, y <- y_range do
+        %__MODULE__{point: %Point{x: x, y: y}}
+      end
+
+    neighborhood
+    |> Enum.filter(&valid_neighbor?(&1, node, max_x, max_y))
+  end
+
+  defp valid_neighbor?(neighbor, node, max_x, max_y) do
+    neighbor != node and
+      neighbor |> valid_position?(max_x, max_y)
+  end
+
+  defp valid_position?(%__MODULE__{}, nil, nil), do: true
+
+  defp valid_position?(%__MODULE__{} = node, max_x, max_y),
+    do: Point.valid_position?(node.point, 0, max_x, 0, max_y, 0, 0)
 end

@@ -23,4 +23,13 @@ defmodule AStar.NodeTest do
 
     assert result == expected_result
   end
+
+  test "neighbors/3 returns only valid neighbors from a node" do
+    node = %Node{point: %Point{x: 1, y: 1}}
+
+    neighbors = node |> Node.neighbors()
+
+    assert neighbors |> length == 8
+    refute node in neighbors
+  end
 end
