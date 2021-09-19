@@ -78,4 +78,22 @@ defmodule AStar.Node do
       node
       |> neighbors
       |> Enum.min_by(&f_score(node, &1, destination))
+
+  @spec a_star(t, t) :: {:ok, [t]}
+  @spec a_star(t, t, t, [t]) :: {:ok, [t]}
+
+  @doc """
+  The best path from a node to a destination.
+  """
+  def a_star(%__MODULE__{} = starter, %__MODULE__{} = destination),
+    do: a_star(starter, destination, starter, [starter])
+
+  def a_star(%__MODULE__{} = _starter, %__MODULE__{} = destination, %__MODULE__{} = current, path)
+      when current == destination,
+      do: {:ok, path |> Enum.reverse()}
+
+  def a_star(%__MODULE__{} = starter, %__MODULE__{} = destination, %__MODULE__{} = current, path) do
+    next = current |> lower_f(destination)
+    a_star(starter, destination, next, [next | path])
+  end
 end

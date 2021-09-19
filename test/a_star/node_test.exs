@@ -42,4 +42,19 @@ defmodule AStar.NodeTest do
 
     assert closest_neighbor == expected_neighbor
   end
+
+  test "a_star/2 returns a node list of the best path through a node and a destination node" do
+    node = %Node{point: %Point{x: 0, y: 0}}
+    destination = %Node{point: %Point{x: 2, y: 2}}
+
+    {:ok, path} = node |> Node.a_star(destination)
+
+    expected_path = [
+      %Node{point: %Point{x: 0, y: 0, z: 0}},
+      %Node{point: %Point{x: 1, y: 1, z: 0}},
+      %Node{point: %Point{x: 2, y: 2, z: 0}}
+    ]
+
+    assert path == expected_path
+  end
 end
